@@ -14,13 +14,13 @@ module Pick() {
 module Circle(dia) { circle(d=dia, $fn=10);
 }
 module Circle1() {
-	Circle(4);
+	Circle(4.2);
 }
 module Circle2() {
-	Circle(1.5);
+	Circle(1.7);
 }
 module Circle3() {
-	Circle(1.7);
+	Circle(1.9);
 }
 module BaseHoles() {
 	Circle1();
@@ -39,31 +39,19 @@ module BaseHoles() {
 }
 module SwitchBase () {
 	thickness = 3;
-	wire_thickness = 0.7;
+	wire_thickness = 0.8;
 	diode_length = 4;
 	diode_thickness = 2;
 
-	// TODO: replace Path and Path2 to Path3.
 	module Path(length) {
-		cube([length, wire_thickness, wire_thickness]);
-	}
-	module Path2(length) {
-		cube([length, wire_thickness, wire_thickness], true);
-		children();
-	}
-	module Path3(length) {
 		translate([length/2, 0, wire_thickness/2]) {
 			cube([length, wire_thickness, wire_thickness], true);
 		}
 		children();
 	}
 	module DiodeWirePath(length) {
-		translate([length/2, 0, diode_thickness/2]) {
-			Path2(length);
-		}
-		translate([length/2, 0, wire_thickness/2]) {
-			Path2(length);
-		}
+		translate([0, 0, diode_thickness/2 - wire_thickness/2]) Path(length);
+		translate([0, 0, 0]) Path(length);
 		children();
 	}
 	module Diode() {
@@ -90,29 +78,28 @@ module SwitchBase () {
 				mirror([0, 0, 1]) {
 					translate([2.54, 5.08, 0]) {
 						rotate([0, 0, -85]) {
-							DiodeWirePath(7.5) {
-								translate([7.5, 0, 0]) linear_extrude(5) Circle(1);
-							};
 							Diode();
+							DiodeWirePath(7.5) translate([8, 0, 0]) {
+								linear_extrude(3) Circle(1.2);
+							};
 						}
-						rotate([0, 0, 180]) Path3(3) {
-							translate([3, 0, 0]) linear_extrude(3) Circle(1);
+						rotate([0, 0, 180]) Path(3) {
+							translate([3, 0, 0]) linear_extrude(3) Circle(1.2);
 						}
 							
 					}
 
-					translate([5, -2.5, 0]) Path3(10) linear_extrude(5) Circle(1);
-
-					translate([-3.81, 2.54 - wire_thickness/2, 0]) {
-						mirror([1, 0, 0])
-							Path(5);
+					translate([5, -2.5, 0]) Path(10) linear_extrude(5) Circle(1.2);
+					
+					translate([-3.81, 2.54, 0])	rotate([0, 0, 180]) {
+						Path(2.5) {
+							translate([2.3, 0, 0]) linear_extrude(5) Circle(1.2);
+						}
 					}
 
-					translate([-3.81 - wire_thickness/2, 2.54, 0]) {
-						rotate([0, 0, 90]) {
-							mirror([0, 1, 0]) {
-								Path(5);
-							}
+					translate([-3.81, -7, 0]) rotate([0, 0, 90]) {
+						Path(14) {
+							translate([12, 0, 0]) linear_extrude(5) Circle(1.2);
 						}
 					}
 				}
@@ -122,18 +109,3 @@ module SwitchBase () {
 }
 
 render() SwitchBase();
-
-// translate([0, 0, 1.5]) {
-// 	render() Pick();
-// }
-// linear_extrude(1.5) {
-// 	difference() {
-// 		square(20);
-// 		translate([3, 3, 0]) {
-// 			square(14);
-// 		}
-// 	}
-// 	translate([3, 3, 0])
-// 		SwitchBase();
-// }
-echo(concat([1, 2], [0]));
