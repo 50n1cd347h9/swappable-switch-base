@@ -27,7 +27,7 @@ module BaseHoles() {
 		Circle3();
 }
 module SwitchBase () {
-	thickness = 3;
+	thickness = 2.4;
 	wire_thickness = 0.8;
 	diode_length = 4;
 	diode_thickness = 2;
@@ -63,10 +63,14 @@ module SwitchBase () {
 					translate([2.54, 5.08, 0]) {
 						rotate([0, 0, -85]) {
 							Diode();
-							DiodeWirePath(8)
+							DiodeWirePath(15) {
 								translate([8, 0, 0])
 									linear_extrude(3)
 										Circle(1.2);
+								translate([10.5, 0, 0])
+									linear_extrude(3)
+										Circle(1.2);
+							}
 						}
 
 						rotate([0, 0, 180])
@@ -76,11 +80,6 @@ module SwitchBase () {
 										Circle(1.2);
 					}
 
-					translate([5, -2.5, 0])
-						Path(10)
-							linear_extrude(5)
-								Circle(1.2);
-					
 					translate([-3.81, 2.54, 0])
 						rotate([0, 0, 180])
 							Path(2.5)
