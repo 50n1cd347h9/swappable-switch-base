@@ -11,31 +11,20 @@ module Pick() {
 
 }
 
-module Circle(dia) { circle(d=dia, $fn=10);
-}
-module Circle1() {
-	Circle(4.2);
-}
-module Circle2() {
-	Circle(1.7);
-}
-module Circle3() {
-	Circle(1.9);
-}
+module Circle(dia) circle(d=dia, $fn=10);
+module Circle1() Circle(4.2);
+module Circle2() Circle(1.7);
+module Circle3() Circle(1.9);
 module BaseHoles() {
 	Circle1();
-	translate([-3.81, 2.54, 0]) {
+	translate([-3.81, 2.54, 0])
 		Circle2();
-	}
-	translate([2.54, 5.08, 0]) {
+	translate([2.54, 5.08, 0])
 		Circle2();
-	}
-	translate([5.08, 0, 0]) {
+	translate([5.08, 0, 0])
 		Circle3();
-	}
-	translate([-5.08, 0, 0]) {
+	translate([-5.08, 0, 0])
 		Circle3();
-	}
 }
 module SwitchBase () {
 	thickness = 3;
@@ -44,9 +33,8 @@ module SwitchBase () {
 	diode_thickness = 2;
 
 	module Path(length) {
-		translate([length/2, 0, wire_thickness/2]) {
+		translate([length/2, 0, wire_thickness/2])
 			cube([length, wire_thickness, wire_thickness], true);
-		}
 		children();
 	}
 	module DiodeWirePath(length) {
@@ -54,58 +42,60 @@ module SwitchBase () {
 		translate([0, 0, 0]) Path(length);
 		children();
 	}
-	module Diode() {
-		translate([diode_length/2 + 1.4, 0, diode_thickness/2]){
+	module Diode()
+		translate([diode_length/2 + 1.4, 0, diode_thickness/2])
 			cube([diode_length, diode_thickness + 0.7, diode_thickness], true);
-		}
-	}
 
 	difference() {
-		linear_extrude(thickness) {
+		linear_extrude(thickness)
 			difference() {
 				square(14, false);
 				translate([7, 7, 0]) {
 					BaseHoles();
-					translate([-2, -7, 0]) {
+					translate([-2, -7, 0])
 						square([4, 7]);
-					}
 				}
 			}
-		}
 
-		translate([7, 7, 0]) {
-			translate([0, 0, thickness]) {
+		translate([7, 7, 0])
+			translate([0, 0, thickness])
 				mirror([0, 0, 1]) {
 					translate([2.54, 5.08, 0]) {
 						rotate([0, 0, -85]) {
 							Diode();
-							DiodeWirePath(7.5) translate([8, 0, 0]) {
-								linear_extrude(3) Circle(1.2);
-							};
+							DiodeWirePath(8)
+								translate([8, 0, 0])
+									linear_extrude(3)
+										Circle(1.2);
 						}
-						rotate([0, 0, 180]) Path(3) {
-							translate([3, 0, 0]) linear_extrude(3) Circle(1.2);
-						}
-							
+
+						rotate([0, 0, 180])
+							Path(3)
+								translate([3, 0, 0])
+									linear_extrude(3)
+										Circle(1.2);
 					}
 
-					translate([5, -2.5, 0]) Path(10) linear_extrude(5) Circle(1.2);
+					translate([5, -2.5, 0])
+						Path(10)
+							linear_extrude(5)
+								Circle(1.2);
 					
-					translate([-3.81, 2.54, 0])	rotate([0, 0, 180]) {
-						Path(2.5) {
-							translate([2.3, 0, 0]) linear_extrude(5) Circle(1.2);
-						}
-					}
+					translate([-3.81, 2.54, 0])
+						rotate([0, 0, 180])
+							Path(2.5)
+								translate([2.3, 0, 0])
+									linear_extrude(5)
+										Circle(1.2);
 
-					translate([-3.81, -7, 0]) rotate([0, 0, 90]) {
-						Path(14) {
-							translate([12, 0, 0]) linear_extrude(5) Circle(1.2);
-						}
-					}
+					translate([-3.81, -7, 0])
+						rotate([0, 0, 90])
+							Path(14) 
+								translate([12, 0, 0])
+									linear_extrude(5)
+										Circle(1.2);
 				}
-			}
-		}
 	}
 }
 
-render() SwitchBase();
+SwitchBase();
